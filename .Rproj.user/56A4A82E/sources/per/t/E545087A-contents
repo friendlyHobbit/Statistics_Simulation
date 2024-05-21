@@ -91,7 +91,10 @@ CI_dance <- function(dep_var, pop_mean, n_i, sample_size) {
 }
 
 
-# Takes dependent variable, number of iterations and sample size
+############## run the dance of the CIs #####################
+
+# This runs the simulation of the experiments
+# enter the dependent variable, population mean, number of experiments and sample size per experiment
 CI_dance("IQ", population_IQ,  100, 20)
 
 
