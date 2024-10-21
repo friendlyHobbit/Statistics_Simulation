@@ -45,7 +45,7 @@ ggplot(data=population_df, aes(x=IQ, group=sex, fill=sex)) + geom_density(adjust
 
 
 
-################# Simulate experiments ######################
+################# Set up simulation ######################
 
 # create DF to hold results from all iterations
 results_df <- data.frame() 
@@ -102,7 +102,8 @@ random_sample_experiment <- function(dep_var, pop_mean, n_i, sample_size) {
 
 # This runs the simulation of the experiments N times
 # enter the dependent variable, population mean, number of experiments and sample size per experiment
-random_sample_experiment("height", population_height,  100, 20)
+random_sample_experiment("IQ", population_IQ,  100, 20)
+#random_sample_experiment("height", population_height,  100, 20)
 
 
 # visualize the dance of the p-values
