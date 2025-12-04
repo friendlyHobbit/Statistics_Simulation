@@ -37,10 +37,10 @@ population_df$sex <- as.factor(population_df$sex)
 
 
 # visualize the population height
-ggplot(data=population_df, aes(x=height, group=sex, fill=sex)) + geom_density(adjust=1.5, alpha=.4) 
+#ggplot(data=population_df, aes(x=height, group=sex, fill=sex)) + geom_density(adjust=1.5, alpha=.4) 
 
 # visualize the population IQ
-ggplot(data=population_df, aes(x=IQ, group=sex, fill=sex)) + geom_density(adjust=1.5, alpha=.4) 
+#ggplot(data=population_df, aes(x=IQ, group=sex, fill=sex)) + geom_density(adjust=1.5, alpha=.4) 
 
 
 
@@ -53,10 +53,18 @@ results_df <- data.frame()
 
 # Function than runs an experiment (t-test). Takes a random sample from the population each time it's called.
 random_sample_experiment <- function(dep_var, pop_mean, n_i, sample_size) {
-
+  #debug
+  #n_i=5
+  
   # each iteration represents an experiment that takes a random sample 
   # (of the set sample size) from the population
   for (i in 1:n_i) {
+    #debug
+    #sample_size=20
+    #dep_var="IQ"
+    #pop_mean=100
+    #i=1
+    
     # get sample
     sample_women <- sample_n(women_df, (sample_size*0.5))
     sample_men <- sample_n(men_df, (sample_size*0.5))
@@ -65,7 +73,7 @@ random_sample_experiment <- function(dep_var, pop_mean, n_i, sample_size) {
     
     # t test
     formula <- as.formula(paste(dep_var, "~ sex"))
-    res <- t.test(formula, data = sample, var.equal = TRUE, paired = FALSE)
+    res <- t.test(formula, data = sample, var.equal = TRUE)
     
     # does CI include true mean?
     true_CI <- ifelse(res$conf.int[1] < pop_mean & pop_mean < res$conf.int[2], 1, 0)
@@ -93,8 +101,9 @@ random_sample_experiment <- function(dep_var, pop_mean, n_i, sample_size) {
     results_df <<- rbind(results_df, res_df)
     
     # show results
-    #print(res)
+    #print(res_df)
   }
+  #return(results_df)
 }
 
 
