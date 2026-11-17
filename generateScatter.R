@@ -3,6 +3,10 @@ library(MASS)
 library(brms)
 #install.packages("ggExtra")
 library(ggExtra)
+# install.packages("bayestestR")
+library(bayestestR)
+#install.packages("EnvStats")
+library(EnvStats)
 
 # Set a seed for reproducibility
 #set.seed(123) 
@@ -25,26 +29,6 @@ bvnData <- mvrnorm(
 
 # create df
 bvnData <- as.data.frame(bvnData)
-bvnData$point_size <- point_size
-bvnData$point_color <- point_color
-
-
-
-# visualize scatterplot
-ggplot(bvnData, aes(V1, V2, color = point_color))+
-  geom_point(size = point_size, alpha = 0.9) +
-  scale_color_gradient2(low = "#817e7f", mid = "#bf4073", high = "#ff0066", midpoint = mean(point_color), space = "Lab",) +
-  theme(panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line = element_line(colour = "black"),
-        panel.background = element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.y=element_blank()) +
-  labs(x = NULL,
-       y = NULL)
 
 
 # visualize scatterplot - neutral
@@ -63,13 +47,179 @@ simple_plot +
   labs(x = "X",
        y = "Y")
 
-simple_plot +
-  labs(x = "N Trees",
-       y = "N Lawers")
 
-simple +
-  labs(x = "N Trees",
-       y = "N Lawers")
+
+############## Bivariate exponential ############## 
+
+# set parameters
+n_points <- 600
+
+# generate data
+x <- rexp(n_points, rate = .1)
+y <- rexp(n_points, rate = .1)
+
+# create df
+Data <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(Data, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
+
+
+############## Bivariate lognormal ############## 
+
+# set parameters
+n_points <- 600
+
+# generate data
+x <- rlnorm(n_points, meanlog = 0, sdlog = 0.5)
+y <- rlnorm(n_points, meanlog = 0, sdlog = 0.5)
+# dlnorm, plnorm, qlnorm, rlnorm
+
+# create df
+Data <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(Data, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
+
+############## Bivariate gamma ############## 
+
+# generate data points
+x <- rgamma(n_points, shape = 10, rate = 10)
+y <- rgamma(n_points, shape = 10, rate = 10)
+
+# create df
+df <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(df, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
+
+############## Bivariate beta ############## 
+
+# generate data
+x <- rbeta(n_points, shape1 = 1, shape2 = 1, ncp = 0)
+y <- rbeta(n_points, shape1 = 10, shape2 = 10, ncp = 2)
+
+#plot(y)
+
+# create df
+Data <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(Data, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
+
+
+
+############## Bivariate uniform ############## 
+
+# set parameters
+n_points <- 600
+
+# generate data
+x <- runif(n_points, 0, 10)
+y <- runif(n_points, 0, 10)
+
+# create df
+Data <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(Data, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
+
+
+############## Bivariate pareto ############## 
+
+# generate data
+x <- rpareto(n_points, location = 5, shape = 100)
+y <- rpareto(n_points, location = 2, shape = 100)
+
+# create df
+Data <- data.frame(x,y)
+
+# visualize scatterplot
+simple_plot <- ggplot(Data, aes(x, y))+
+  geom_point(alpha = 0.9) +
+  theme(panel.border = element_rect(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+simple_plot +
+  labs(x = "X",
+       y = "Y")
+
 
 
 
@@ -410,130 +560,103 @@ ggplot(bvnData, aes(V1, V2, color=md_out))+
 
 
 
-############## skewed plot ###########
-
-bvnData$Vskew <- rskew_normal(n_points, mu = 10, sigma = 10, alpha = 5, xi = NULL, omega = NULL)
-
-ggplot(bvnData, aes(x = Vskew)) +
-  geom_density()
-
-# visualize scatterplot
-ggplot(bvnData, aes(V1, Vskew))+
-  geom_point() +
-  scale_color_viridis_c() +
-  #scale_color_continuous(palette = c("#FEE0D2", "#FC9272", "#DE2D26"), transform = "log") +
-  theme(panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line = element_line(colour = "black"),
-        panel.background = element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.y=element_blank()) +
-  labs(x = NULL,
-       y = NULL)
-
-
-
 ############## two cluster scatterplot ############## 
 
-# set parameters
-n_points <- 200
-set_sd <- 1.5
-
-# cluster 1
-V1 <- rnorm(n_points*0.5, mean = 4, sd = set_sd)
-V2 <- rnorm(n_points*0.5, mean = 4, sd = set_sd) 
-df1 <- data.frame(V1, V2)
-
-# cluster 2
-V1 <- rnorm(n_points*0.5, mean = 8, sd = set_sd)
-V2 <- rnorm(n_points*0.5, mean = 8, sd = set_sd) 
-df2 <- data.frame(V1, V2)
-
-df <- rbind(df1, df2)
-
-two_clusters <- ggplot(df, aes(V1, V2))+
-  theme(panel.border = element_rect(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.y=element_blank()) +
-  labs(x = "X",
-       y = "Y")
-
-# regular
-two_clusters + 
-  geom_point() 
-
-
-# regression 95 CI band
-two_clusters + 
-  geom_point() +
-  stat_smooth(method = "lm",
-              formula = y ~ x,
-              geom = "smooth",
-              se = TRUE,
-              level = .95,
-              color = NA)
-
-# heatmap
-two_clusters + 
-  geom_density_2d_filled() +
-  scale_fill_manual(
-    values = colorRampPalette(c("#c9c8c5", "#fee890"))(10)
-  )+
-  geom_point(color = "black") 
-
-# smoothend
-two_clusters +
-  stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
-  #scale_fill_viridis_c() +
-  scale_fill_gradient(low = "#c9c8c5", high = "#fee890") +
-  geom_point(alpha = 1, color = "black") 
-
-# contours  
-two_clusters +
-  geom_density_2d() +
-  geom_point() 
-
-# elipse
-two_clusters +
-  stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
-  geom_point(alpha = 1) 
+GenScatter <- function(n_points, Sigma, mu2){
+  # cluster 1
+  cluster1 <- mvrnorm(
+    n = n_points*0.5,
+    mu = c(0, 0),
+    Sigma = Sigma,
+    empirical = TRUE
+  )
+  
+  # cluster 2
+  cluster2 <- mvrnorm(
+    n = n_points*0.5,
+    mu = mu2,
+    Sigma = Sigma,
+    empirical = TRUE
+  )
+  
+  # combine
+  bvnData <- rbind(cluster1, cluster2) |>
+    as.data.frame()
+  
+  print(cor(cluster1))
+  print(cor(cluster2))
+  print(cor(bvnData$V1, bvnData$V2))
+    
+  # plot
+  plot <- ggplot(bvnData, aes(V1, V2)) +
+    theme(
+      panel.border = element_rect(colour = "black", fill = NA),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.text.x = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.y = element_blank()
+    ) +
+    labs(x = "X", y = "Y") 
+  
+  return(plot)
+}
 
 
-
-
-############## three cluster scatterplot ############## 
-
-# set parameters
+# parameters
 n_points <- 300
-c_sd <- 0.8
+# correlation of 0.6 for each cluster
+Sigma6 <- matrix(c(0.3, 0.18, 0.18, 0.3), ncol = 2)
+# correlation of 0.4 for each cluster
+Sigma4 <- matrix(c(0.3, 0.12, 0.12, 0.3), ncol = 2)
 
-# cluster 1
-V1 <- rnorm(n_points*0.3, mean = 4, sd = c_sd)
-V2 <- rnorm(n_points*0.3, mean = 4, sd = c_sd) 
-df1 <- data.frame(V1, V2)
+mu2.1 <- c(1.5, 1.5)  # overlapping
+mu2.2 <- c(2, 2)      # little separation
+mu2.3 <- c(3, 3)      # moderately separated
+mu2.4 <- c(4, 4)      # clearly separated
 
-# cluster 2
-V1 <- rnorm(n_points*0.3, mean = 8, sd = c_sd)
-V2 <- rnorm(n_points*0.3, mean = 8, sd = c_sd) 
-df2 <- data.frame(V1, V2)
+for (i in 1:4){
+  temp_plot <- GenScatter(n_points, Sigma4, mu2.1)
+  # simple
+  print(temp_plot + geom_point(alpha = 1))
+  # regression 95 CI band
+  print(temp_plot + geom_point(alpha = 1) + 
+          stat_smooth(method = "lm",
+                      formula = y ~ x,
+                      geom = "smooth",
+                      se = TRUE,
+                      level = .95,
+                      color = NA))
+  # smoothend
+  #print(temp_plot +
+  #        stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
+  #        scale_fill_viridis_c() +
+  #        geom_point(alpha = 1, color = "white") +
+  #        guides(fill = "none") )
+  # contours 
+  print(temp_plot +
+          geom_density_2d() +
+          geom_point() )
+  # elipse
+  #print(temp_plot +
+  #        stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  #        geom_point(alpha = 1) )
+  #
+  }
 
-# cluster 3
-V1 <- rnorm(n_points*0.3, mean = 4, sd = c_sd)
-V2 <- rnorm(n_points*0.3, mean = 8, sd = c_sd) 
-df3 <- data.frame(V1, V2)
 
-df <- rbind(df1, df2, df3)
 
-ggplot(df, aes(V1, V2))+
-  geom_point() +
+
+
+
+########## Iris dataset ########
+
+iris
+
+# Petal.Length X Petal.Width
+iris_plot <- ggplot(iris, aes(Petal.Length, Petal.Width)) +
   theme(panel.border = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -544,7 +667,162 @@ ggplot(df, aes(V1, V2))+
         axis.ticks.y=element_blank(),
         axis.text.y=element_blank()) 
 
+# scatter simple
+iris_plot + geom_point()
 
+# regression 95 CI band
+iris_plot + 
+  geom_point() +
+  stat_smooth(method = "lm",
+              formula = y ~ x,
+              geom = "smooth",
+              se = TRUE,
+              level = .95,
+              color = NA)
+
+# elipse
+iris_plot +
+  stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  geom_point(alpha = 1) 
+
+
+# heatmap
+iris_plot + 
+  geom_density_2d_filled() +
+  #scale_fill_manual(values = colorRampPalette(c("#c9c8c5", "#fee890"))(12))+
+  geom_point(color = "white") +
+  guides(fill = "none")
+
+# smoothend
+iris_plot +
+        stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
+        scale_fill_viridis_c() +
+        geom_point(alpha = 1, color = "white") +
+        guides(fill = "none") +
+  guides(fill = "none")
+
+# contours  
+iris_plot +
+  geom_density_2d() +
+  geom_point() 
+
+
+
+# Petal.Length X Petal.Width include species
+iris_plot2 <- ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black"),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+# scatter simple
+iris_plot2 + geom_point()
+
+# regression 95 CI band
+iris_plot2 + 
+  geom_point() +
+  stat_smooth(method = "lm",
+              fullrange=FALSE,
+              se = TRUE,
+              level = .95)
+
+# elipse
+iris_plot2 +
+  stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  geom_point(alpha = 1) 
+
+
+
+
+########## Simpson's Paradox ########
+# https://easystats.github.io/bayestestR/reference/simulate_simpson.html
+
+sim_data <- simulate_simpson(
+  n = 100,
+  r = -0.5,
+  groups = 3,
+  difference = 1.6,
+  group_prefix = "G_"
+)
+
+plot <- ggplot(sim_data, aes(V1, V2)) +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black"),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+plot + geom_point()
+
+# regression 95 CI band
+plot + 
+  geom_point() +
+  stat_smooth(method = "lm",
+              formula = y ~ x,
+              geom = "smooth",
+              se = TRUE,
+              level = .95,
+              color = NA)
+
+# heatmap
+plot + 
+  geom_density_2d_filled() +
+  geom_point(color = "white") +
+  guides(fill = "none")
+
+# smoothend
+plot +
+  stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
+  scale_fill_viridis_c() +
+  geom_point(alpha = 1, color = "white") +
+  guides(fill = "none") +
+  guides(fill = "none")
+
+# contours  
+plot +
+  geom_density_2d() +
+  geom_point() 
+
+plot +
+  stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  geom_point()
+
+# grouped plot
+grouped_plot <- ggplot(sim_data, aes(V1, V2, color= Group)) +
+  scale_color_manual(values = c(G_1 = "black", G_2 = "black", G_3 = "black"))+
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black"),
+        panel.background = element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank()) 
+
+grouped_plot + geom_point()
+
+# regression 95 CI band
+grouped_plot + 
+  geom_point() +
+  stat_smooth(method = "lm",
+              fullrange=FALSE,
+              se = TRUE,
+              level = .95)
+
+# elipse
+grouped_plot +
+  stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  geom_point(alpha = 1) 
 
 
 
