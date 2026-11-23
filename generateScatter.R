@@ -4,9 +4,9 @@ library(brms)
 #install.packages("ggExtra")
 library(ggExtra)
 # install.packages("bayestestR")
-library(bayestestR)
+#library(bayestestR)
 #install.packages("EnvStats")
-library(EnvStats)
+#library(EnvStats)
 
 # Set a seed for reproducibility
 #set.seed(123) 
@@ -14,38 +14,303 @@ library(EnvStats)
 
 ############## Bivariate normal scatterplot ############## 
 
+
+GenScatter <- function(n_points, variance, covariance){
+  # generate data
+  bvnData <- mvrnorm(
+    n = n_points, 
+    mu = c(1, 1), 
+    Sigma = matrix(c(variance, covariance, covariance, variance), 
+                   ncol = 2)
+  )
+  
+  # create df
+  bvnData <- as.data.frame(bvnData)
+  
+  # visualize scatterplot - neutral
+  simple_plot <- ggplot(bvnData, aes(V1, V2))+
+    geom_point(alpha = 0.9) +
+    theme(panel.border = element_rect(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank())  +   
+    labs(x = "X",
+         y = "Y")
+  
+  return(simple_plot)
+}
+
+
 # set parameters
+n <- 400
+v <- 0.1
+r <- 0.6
+
+# calc covariance
+cov <- r * sqrt(v) * sqrt(v)
+print(cov)
+print(GenScatter(n, v, cov))
+
+
+for (i in 1:5){
+  v <- i
+  # calc covariance
+  cov <- r * sqrt(v) * sqrt(v)
+  print(cov)
+  
+  print(GenScatter(n, v, cov))
+}
+
+
+
+############## 2 cluster scatterplot ############## 
+
+
+GenScatter <- function(n_points, set_sd, set_m1, set_m2){
+  
+  n_clusters <- 2
+  
+  # data
+  x <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  df1 <- data.frame(x,y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  df2 <- data.frame(x, y)
+  
+  clusterData <- rbind(df1, df2)
+  
+  # visualize scatterplot - neutral
+  simple_plot <- ggplot(clusterData, aes(x, y))+
+    geom_point(alpha = 0.9) +
+    theme(panel.border = element_rect(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank()) +
+    labs(x = "X",
+         y = "Y")
+  
+  return(simple_plot)
+}
+
+n_p <- 400
+sd <- 1
+m1 <- 0
+m2 <- 4
+
+for (i in 1:5){
+  print(i)
+  print(GenScatter(n_p, sd, m1, i))
+  }
+
+
+
+############## 3 cluster scatterplot ############## 
+
+GenScatter <- function(n_points, set_sd, set_m1, set_m2){
+  n_clusters <- 3
+  
+  # data
+  x <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  df1 <- data.frame(x,y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  df2 <- data.frame(x, y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  df3 <- data.frame(x, y)
+  
+  clusterData <- rbind(df1, df2, df3)
+  
+  # visualize scatterplot - neutral
+  simple_plot <- ggplot(clusterData, aes(x, y))+
+    geom_point(alpha = 0.9) +
+    theme(panel.border = element_rect(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank())  + 
+    labs(x = "X",
+         y = "Y")
+  
+  return(simple_plot)
+}
+
+
+n_p <- 400
+sd <- 1
+m1 <- 0
+m2 <- 4
+
+for (i in 1:5){
+  print(i*0.2+0.4)
+  print(GenScatter(i*100, sd, m1, m2))
+}
+
+
+
+
+############## 4 cluster scatterplot ############## 
+
+GenScatter <- function(n_points, set_sd, set_m1, set_m2){
+  n_clusters <- 4
+  
+  # data
+  x <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  df1 <- data.frame(x,y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  df2 <- data.frame(x, y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  df3 <- data.frame(x, y)
+  
+  x <- rnorm(n_points/n_clusters, mean = set_m2, sd = set_sd)
+  y <- rnorm(n_points/n_clusters, mean = set_m1, sd = set_sd)
+  df4 <- data.frame(x, y)
+  
+  
+  clusterData <- rbind(df1, df2, df3, df4)
+  
+  # visualize scatterplot - neutral
+  simple_plot <- ggplot(clusterData, aes(x, y))+
+    geom_point(alpha = 0.9) +
+    theme(panel.border = element_rect(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank())  +
+    labs(x = "X",
+         y = "Y")
+  
+  return(simple_plot)
+}
+
+
+n_p <- 400
+sd <- 1
+m1 <- 0
+m2 <- 4
+
+for (i in 1:5){
+  print(i*0.2+0.4)
+  print(GenScatter(n_p, sd, m1, i))
+}
+
+
+
+############## two cluster normal scatterplot ############## 
+
+GenScatter <- function(n_points, Sigma, mu2){
+  # cluster 1
+  cluster1 <- mvrnorm(
+    n = n_points*0.5,
+    mu = c(0, 0),
+    Sigma = Sigma,
+    empirical = TRUE
+  )
+  
+  # cluster 2
+  cluster2 <- mvrnorm(
+    n = n_points*0.5,
+    mu = mu2,
+    Sigma = Sigma,
+    empirical = TRUE
+  )
+  
+  # combine
+  bvnData <- rbind(cluster1, cluster2) |>
+    as.data.frame()
+  
+  print(cor(cluster1))
+  print(cor(cluster2))
+  print(cor(bvnData$V1, bvnData$V2))
+  
+  # plot
+  plot <- ggplot(bvnData, aes(V1, V2)) +
+    theme(
+      panel.border = element_rect(colour = "black", fill = NA),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.text.x = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.y = element_blank()
+    ) +
+    labs(x = "X", y = "Y") 
+  
+  return(plot)
+}
+
+
+# parameters
 n_points <- 300
-point_size <- rnorm(n_points, mean = 4, sd = 1)
-point_color <- rnorm(n_points, mean = 6, sd = 1) 
+# correlation of 0.6 for each cluster
+Sigma6 <- matrix(c(0.3, 0.18, 0.18, 0.3), ncol = 2)
+# correlation of 0.4 for each cluster
+Sigma4 <- matrix(c(0.3, 0.12, 0.12, 0.3), ncol = 2)
 
-# generate data
-bvnData <- mvrnorm(
-  n = n_points, 
-  mu = c(1, 1), 
-  Sigma = matrix(c(0.3, 0.18, 0.18, 0.3), 
-                 ncol = 2)
-)
-
-# create df
-bvnData <- as.data.frame(bvnData)
+mu2.1 <- c(1.5, 1.5)  # overlapping
+mu2.2 <- c(2, 2)      # little separation
+mu2.3 <- c(3, 3)      # moderately separated
+mu2.4 <- c(4, 4)      # clearly separated
 
 
-# visualize scatterplot - neutral
-simple_plot <- ggplot(bvnData, aes(V1, V2))+
-  geom_point(alpha = 0.9) +
-  theme(panel.border = element_rect(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.y=element_blank(),
-        axis.text.y=element_blank()) 
+print(GenScatter(n_points, Sigma4, mu2.3) + geom_point(alpha = 1))
 
-simple_plot +
-  labs(x = "X",
-       y = "Y")
+
+for (i in 1:4){
+  temp_plot <- GenScatter(n_points, Sigma4, mu2.1)
+  # simple
+  print(temp_plot + geom_point(alpha = 1))
+  # regression 95 CI band
+  print(temp_plot + geom_point(alpha = 1) + 
+          stat_smooth(method = "lm",
+                      formula = y ~ x,
+                      geom = "smooth",
+                      se = TRUE,
+                      level = .95,
+                      color = NA))
+  # smoothend
+  #print(temp_plot +
+  #        stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
+  #        scale_fill_viridis_c() +
+  #        geom_point(alpha = 1, color = "white") +
+  #        guides(fill = "none") )
+  # contours 
+  print(temp_plot +
+          #geom_density_2d() +
+          geom_point() )
+  # elipse
+  #print(temp_plot +
+  #        stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
+  #        geom_point(alpha = 1) )
+  #
+}
+
+
 
 
 
@@ -556,95 +821,6 @@ ggplot(bvnData, aes(V1, V2, color=md_out))+
        y = NULL,
        title = "mahalanobis distance outlier (positional)",
        color="outlier")
-
-
-
-
-############## two cluster scatterplot ############## 
-
-GenScatter <- function(n_points, Sigma, mu2){
-  # cluster 1
-  cluster1 <- mvrnorm(
-    n = n_points*0.5,
-    mu = c(0, 0),
-    Sigma = Sigma,
-    empirical = TRUE
-  )
-  
-  # cluster 2
-  cluster2 <- mvrnorm(
-    n = n_points*0.5,
-    mu = mu2,
-    Sigma = Sigma,
-    empirical = TRUE
-  )
-  
-  # combine
-  bvnData <- rbind(cluster1, cluster2) |>
-    as.data.frame()
-  
-  print(cor(cluster1))
-  print(cor(cluster2))
-  print(cor(bvnData$V1, bvnData$V2))
-    
-  # plot
-  plot <- ggplot(bvnData, aes(V1, V2)) +
-    theme(
-      panel.border = element_rect(colour = "black", fill = NA),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.background = element_blank(),
-      axis.ticks.x = element_blank(),
-      axis.text.x = element_blank(),
-      axis.ticks.y = element_blank(),
-      axis.text.y = element_blank()
-    ) +
-    labs(x = "X", y = "Y") 
-  
-  return(plot)
-}
-
-
-# parameters
-n_points <- 300
-# correlation of 0.6 for each cluster
-Sigma6 <- matrix(c(0.3, 0.18, 0.18, 0.3), ncol = 2)
-# correlation of 0.4 for each cluster
-Sigma4 <- matrix(c(0.3, 0.12, 0.12, 0.3), ncol = 2)
-
-mu2.1 <- c(1.5, 1.5)  # overlapping
-mu2.2 <- c(2, 2)      # little separation
-mu2.3 <- c(3, 3)      # moderately separated
-mu2.4 <- c(4, 4)      # clearly separated
-
-for (i in 1:4){
-  temp_plot <- GenScatter(n_points, Sigma4, mu2.1)
-  # simple
-  print(temp_plot + geom_point(alpha = 1))
-  # regression 95 CI band
-  print(temp_plot + geom_point(alpha = 1) + 
-          stat_smooth(method = "lm",
-                      formula = y ~ x,
-                      geom = "smooth",
-                      se = TRUE,
-                      level = .95,
-                      color = NA))
-  # smoothend
-  #print(temp_plot +
-  #        stat_density_2d(geom = "tile", aes(fill = after_stat(density)), contour = FALSE) +
-  #        scale_fill_viridis_c() +
-  #        geom_point(alpha = 1, color = "white") +
-  #        guides(fill = "none") )
-  # contours 
-  print(temp_plot +
-          geom_density_2d() +
-          geom_point() )
-  # elipse
-  #print(temp_plot +
-  #        stat_ellipse(geom = "polygon", alpha = 0.15, level = 0.95, type = "norm") +
-  #        geom_point(alpha = 1) )
-  #
-  }
 
 
 
